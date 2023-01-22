@@ -1,0 +1,7 @@
+#xupopter-extension-container {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 999999999;
+    height: 100vh;
+}
