@@ -4,6 +4,7 @@
     import { onMount } from 'svelte';
     import RecipeEditor from 'src/lib/RecipeEditor';
     import {editor} from "../stores/editor";
+    import { shadowDOM } from "src/stores/shadow";
 
     let styles;
 
@@ -14,7 +15,7 @@
     });
 
     function drawflow(node) {
-        $editor = new RecipeEditor(node);
+        $editor = new RecipeEditor(node, $shadowDOM);
 	}
 </script>
 <div class="w-100">

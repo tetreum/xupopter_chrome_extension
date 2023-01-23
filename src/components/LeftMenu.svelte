@@ -4,18 +4,15 @@
     const assetUrl = (name) => {
         return "chrome-extension://" + chrome.runtime.id + "/src/assets/" + name;
     }
-    const addBlock = (type) => {
-        $editor.addBlock(type);
-    }
 </script>
 <div class="d-flex flex-column me-2">
-    <button on:mousedown={() => addBlock("input")} class="btn btn-secondary left-border-green rounded-0">
+    <button on:mousedown={() => $editor.addBlock("input")} class="btn btn-secondary left-border-green rounded-0">
         Input
     </button>
-    <button class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => $editor.addBlock("click")} class="btn btn-secondary left-border-red rounded-0">
         Click
     </button>
-    <button class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => $editor.addBlock("extract")} class="btn btn-secondary left-border-red rounded-0">
         Extract
     </button>
 </div>
