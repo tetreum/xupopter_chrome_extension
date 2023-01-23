@@ -1,11 +1,9 @@
 <script lang="ts">
-    import Drawflow from 'drawflow'
     import styleDrawflow from 'drawflow/dist/drawflow.min.css?inline'
     import customStyles from '../content/global.css?inline'
     import { onMount } from 'svelte';
     import RecipeEditor from 'src/lib/RecipeEditor';
-
-    export let editor;
+    import {editor} from "../stores/editor";
 
     let styles;
 
@@ -16,8 +14,7 @@
     });
 
     function drawflow(node) {
-        editor = new RecipeEditor(node);
-        console.log(editor)
+        $editor = new RecipeEditor(node);
 	}
 </script>
 <div class="w-100">

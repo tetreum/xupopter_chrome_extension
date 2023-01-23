@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { storage } from "src/storage";
     import { onMount } from "svelte";
     import Diagram from "./Diagram.svelte";
     import LeftMenu from "./LeftMenu.svelte";
@@ -8,9 +7,6 @@
     import FontAwesome from "../content/fa.css?inline";
 
     let styles;
-    let editor;
-
-    $: console.log(editor);
 
 	onMount(async () => {
         fetch('chrome-extension://' + chrome.runtime.id + '/src/assets/webfonts/fa-solid-900.woff2').then(async response => {
@@ -25,8 +21,8 @@
 </script>
 
 <div class="overlay d-flex">
-    <LeftMenu bind:editor />
-    <Diagram  bind:editor />
+    <LeftMenu />
+    <Diagram />
     <div bind:this={styles} class="bootstrap"></div>
 </div>
 

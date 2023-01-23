@@ -22,7 +22,16 @@ export default class RecipeEditor {
     }
 
     drawInputBlock () : void {
-        console.log("dale");
+        const html = `
+            <div class="text-center">
+                <div class="mb-1"><strong>input</strong></div>
+                <div class="text-muted">-</div>
+            </div>
+        `;
+        const data = {};
+        
+        
+        this.editor.addNode('input', 0, 1, 10, this.getLowestY() + 10, 'block-input', data, html, false); 
     }
 
     addBlock (type: string) : void {
@@ -31,5 +40,17 @@ export default class RecipeEditor {
                 this.drawInputBlock();
                 break;
         }
+    }
+
+    getLowestY () : number {
+        let y = 0;
+        Object.keys(this.editor.drawflow.drawflow.Home.data).forEach(id => {
+            const node = this.editor.drawflow.drawflow.Home.data[id];
+            if (node.pos_y > y) {
+                y = node.pos_y;
+            }
+        });
+
+        return y;
     }
 }
