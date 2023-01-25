@@ -3,6 +3,7 @@ import type IBlock from "./IBlock";
 export default class InputBlock implements IBlock {
     public id: number;
     public $html: HTMLElement;
+    private editor;
 
     public html () : string {
         return `
@@ -14,6 +15,7 @@ export default class InputBlock implements IBlock {
     }
 
     public onSelect(): void {
+        this.editor.inspector.enable();
         console.log("onSelect");
     }
 }

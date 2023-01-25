@@ -1,6 +1,7 @@
 import Drawflow from "drawflow";
 import type IBlock from "src/blocks/IBlock";
 import InputBlock from "src/blocks/InputBlock";
+import Inspector from 'inspector-dom';
 
 
 export default class RecipeEditor {
@@ -8,9 +9,18 @@ export default class RecipeEditor {
     private editor: Drawflow;
     private shadowDOM : ShadowRoot;
     private blocks: IBlock[] = [];
+    private inspector;
 
     constructor (node: HTMLElement, shadowDOM : ShadowRoot) {
 		this.shadowDOM = shadowDOM;
+        this.inspector = Inspector({
+            root: 'body',                       // root element
+            excluded: [],                       // excluded children, string or node Element
+            outlineStyles: '2px solid orange',  // styles
+            onClick: el => {
+                console.log(el);
+            }
+        });
         this.setupEditor(node);
         this.drawStartBlock();
     }
@@ -57,6 +67,7 @@ export default class RecipeEditor {
         const nodeId = this.addNode('input', this.getLowestY() + 30, data, block.html());
 
         block.id = nodeId;
+        block.editor = this;
         block.$html = this.getNodeHTML(nodeId);
         this.blocks.push(block);
 
