@@ -17,4 +17,8 @@ npm run dev
 $ npm run build
 ```
 
-## Resources
+## Sponsors
+
+[![tiiny.host](https://tiiny.host/assets/logo.png)](https://tiiny.host)
+
+https://xupopter.tiiny.site/
