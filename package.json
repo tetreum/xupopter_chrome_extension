@@ -25,8 +25,10 @@
         "vite": "3.2.0"
     },
     "dependencies": {
+        "@fexzy/optimal-select": "^4.1.0",
         "drawflow": "^0.0.59",
-        "inspector-dom": "^0.1.1"
+        "inspector-dom": "^0.1.1",
+        "optimal-select-x": "^4.0.4"
     },
     "eslintConfig": {
         "rules": {

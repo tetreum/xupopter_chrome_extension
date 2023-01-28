@@ -8,6 +8,7 @@
     export let index;
     export let block;
     export let hovering;
+    export let inspector;
 </script>
 <div class="text-white p-2" 
     draggable={true} 
@@ -21,9 +22,9 @@
         {#if block.type === 'start'}
             <StartBlock/>
         {:else if block.type === "extract"}
-            <ExtractBlock block={block}/>
+            <ExtractBlock block={block} inspector={inspector}/>
         {:else}
-            <ExtractBlock block={block}/>
+            <ExtractBlock block={block} inspector={inspector}/>
         {/if}
     </div>
 </div>

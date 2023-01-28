@@ -6,8 +6,17 @@
     import {editor} from "../stores/editor";
     import { shadowDOM } from "src/stores/shadow";
     import Block from 'src/blocks2/Block.svelte';
+    import Inspector from 'inspector-dom';
 
     let styles;
+    let inspector = Inspector({
+        root: 'body',                       // root element
+        excluded: ["#xupopter-extension-container"],
+        outlineStyles: '2px solid orange',  // styles
+        onClick: el => {
+            console.log(el);
+        }
+    });
 
 	onMount(async () => {
         const d = document.createElement("style");
@@ -59,6 +68,7 @@
             <Block       
                 block={block}
                 index={index}
+                inspector={inspector}
                 bind:hovering={hovering}
                 on:dragstart={event => dragstart(event.detail.event, index)}
                 on:drop={event => drop(event.detail.event, index)}
@@ -84,6 +94,9 @@
     .real-block {
         background-color: rgba(62, 69, 84, 1);
         box-shadow: 0 2px 15px 2px #000;
+    }
+    #diagram {
+        background-color: #313747;
     }
 </style>
 
