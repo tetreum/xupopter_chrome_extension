@@ -6,13 +6,14 @@
 
     const dispatch = createEventDispatcher();
 
+    export let recipe;
     export let index;
     export let block;
     export let hovering;
     export let inspector;
 </script>
-<div class="text-white p-2 cursor-grab" 
-    draggable={true} 
+<div class="text-white p-2 {block.type === BlockType.Start ? '' : 'cursor-grab'}" 
+    draggable={block.type != BlockType.Start} 
     class:is-active={hovering === index}
     on:mousedown={() => hovering = index}
     on:dragstart={event => dispatch('dragstart', {event})}
@@ -22,13 +23,11 @@
 >
     <div class="real-block mb-2 p-2 block-{block.type}">
         {#if block.type === BlockType.Start}
-            <StartBlock/>
+            <StartBlock bind:block={block}/>
         {:else if block.type === BlockType.Extract}
-            <ExtractBlock bind:block={block} inspector={inspector}/>
-        {:else if block.type === BlockType.Input}
-            <ExtractBlock block={block} inspector={inspector}/>
+            <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
         {:else}
-            <ExtractBlock block={block} inspector={inspector}/>
+        <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
         {/if}
     </div>
 </div>

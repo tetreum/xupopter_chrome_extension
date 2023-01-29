@@ -3,9 +3,9 @@
     import { onMount } from 'svelte';
     import { shadowDOM } from "src/stores/shadow";
     import Block from 'src/blocks/Block.svelte';
-    import Inspector from 'inspector-dom';
-    import type IBlock from 'src/models/IBlock';
+    import Inspector from '../lib/inspector-dom';
     import { BlockType } from 'src/models/IBlock';
+    import type IRecipe from 'src/models/IRecipe';
 
     let styles;
     let inspector = Inspector({
@@ -16,6 +16,13 @@
             console.log(el);
         }
     });
+    let recipe : IRecipe = {
+        uuid: "sdf",
+        name: "my recipe",
+        blocks: [
+            {type: BlockType.Start, details: {type: "url", source: window.location.href}},
+        ]
+    };
 
 	onMount(async () => {
         const d = document.createElement("style");
@@ -37,22 +44,19 @@
                 break;
         }
 
-        const newTracklist = list;
+        const newTracklist = recipe.blocks;
         newTracklist.push(block);
 
         hovering = newTracklist.length - 1;
-        list = newTracklist;
+        recipe.blocks = newTracklist;
     }
 
-    let list : IBlock[] = [
-        {type: BlockType.Start, details: {type: "url", source: window.location.href}},
-    ];
     let hovering : number = 0;
 
     const drop = (event, target) => {
         event.dataTransfer.dropEffect = 'move'; 
         const start = parseInt(event.dataTransfer.getData("text/plain"));
-        const newTracklist = list
+        const newTracklist = recipe.blocks;
 
         if (start < target) {
             newTracklist.splice(target + 1, 0, newTracklist[start]);
@@ -61,8 +65,8 @@
             newTracklist.splice(target, 0, newTracklist[start]);
             newTracklist.splice(start + 1, 1);
         }
-        list = newTracklist
-        hovering = null
+        recipe.blocks = newTracklist;
+        hovering = null;
     }
 
     const dragstart = (event, i) => {
@@ -71,13 +75,21 @@
         const start = i;
         event.dataTransfer.setData('text/plain', start);
     }
+
+    function onBackgroundClick (e) {
+        if (e.target.id != "diagram") {
+            return;
+        }
+        hovering = 0;
+    }
     
 </script>
 <div class="w-100">
     <div>Diagram</div>
-    <div id="diagram">
-        {#each list as block, index  (index)}
+    <div id="diagram" on:mousedown={onBackgroundClick}>
+        {#each recipe.blocks as block, index  (index)}
             <Block       
+                bind:recipe={recipe}
                 bind:block={block}
                 index={index}
                 inspector={inspector}
@@ -103,6 +115,7 @@
     }
     #diagram {
         background-color: #313747;
+        height: 100vh;
     }
 </style>
 
