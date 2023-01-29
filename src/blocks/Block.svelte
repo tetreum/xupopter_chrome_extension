@@ -2,6 +2,7 @@
     import StartBlock from "./StartBlock.svelte";
     import ExtractBlock from "./ExtractBlock.svelte";
     import { createEventDispatcher } from 'svelte';
+    import { BlockType } from "src/models/IBlock";
 
     const dispatch = createEventDispatcher();
 
@@ -10,18 +11,21 @@
     export let hovering;
     export let inspector;
 </script>
-<div class="text-white p-2" 
+<div class="text-white p-2 cursor-grab" 
     draggable={true} 
     class:is-active={hovering === index}
+    on:mousedown={() => hovering = index}
     on:dragstart={event => dispatch('dragstart', {event})}
     on:dragover|preventDefault={e => {return false}}
     on:drop|preventDefault={event => dispatch('drop', {event})}
     on:dragenter={() => hovering = index}
 >
     <div class="real-block mb-2 p-2 block-{block.type}">
-        {#if block.type === 'start'}
+        {#if block.type === BlockType.Start}
             <StartBlock/>
-        {:else if block.type === "extract"}
+        {:else if block.type === BlockType.Extract}
+            <ExtractBlock bind:block={block} inspector={inspector}/>
+        {:else if block.type === BlockType.Input}
             <ExtractBlock block={block} inspector={inspector}/>
         {:else}
             <ExtractBlock block={block} inspector={inspector}/>
@@ -42,5 +46,8 @@
     .is-active .real-block, .real-block:hover {
         background-color: rgba(52, 57, 68, 1);
         color: #fff;
+    }
+    .cursor-grab {
+        cursor: grab;
     }
 </style>

@@ -1,12 +1,11 @@
 <script lang="ts">
-    import styleDrawflow from 'drawflow/dist/drawflow.min.css?inline'
     import customStyles from '../content/global.css?inline'
     import { onMount } from 'svelte';
-    import RecipeEditor from 'src/lib/RecipeEditor';
-    import {editor} from "../stores/editor";
     import { shadowDOM } from "src/stores/shadow";
-    import Block from 'src/blocks2/Block.svelte';
+    import Block from 'src/blocks/Block.svelte';
     import Inspector from 'inspector-dom';
+    import type IBlock from 'src/models/IBlock';
+    import { BlockType } from 'src/models/IBlock';
 
     let styles;
     let inspector = Inspector({
@@ -20,20 +19,33 @@
 
 	onMount(async () => {
         const d = document.createElement("style");
-        d.innerHTML = styleDrawflow + customStyles;
+        d.innerHTML = customStyles;
         styles.appendChild(d);
+
+        // @ts-ignore
+        $shadowDOM.addEventListener('add-block', (e) => { addBlock(e.detail.type) }, false);
     });
 
-    function drawflow(node) {
-        $editor = new RecipeEditor(node, $shadowDOM);
-	}
+    function addBlock (type : BlockType) {
+        let block = {type: type, details: {}};
 
+        switch (type) {
+            case BlockType.Extract:
+                block.details = {
+                    name: "data" + Math.floor(Math.random() * (20 - 1 + 1) + 1)
+                };
+                break;
+        }
 
-    let list = [
-        {type: "start"},
-        {type: "extract", details: {selector: '.name'}},
-        {type: "extract", details: {selector: '.surnames'}},
-        {type: "extract", details: {selector: '.email'}},
+        const newTracklist = list;
+        newTracklist.push(block);
+
+        hovering = newTracklist.length - 1;
+        list = newTracklist;
+    }
+
+    let list : IBlock[] = [
+        {type: BlockType.Start, details: {type: "url", source: window.location.href}},
     ];
     let hovering : number = 0;
 
@@ -66,7 +78,7 @@
     <div id="diagram">
         {#each list as block, index  (index)}
             <Block       
-                block={block}
+                bind:block={block}
                 index={index}
                 inspector={inspector}
                 bind:hovering={hovering}
@@ -75,15 +87,9 @@
             />
         {/each}
     </div>
-    <div use:drawflow class="parent-drawflow"></div>
 </div>
 <div bind:this={styles}></div>
 <style>
-    .parent-drawflow {
-        height: 90vh;
-        width: 100%;
-        background-color: #313747;
-    }
     :global(.block-start) {
         border-left: 4px solid grey !important;
     }

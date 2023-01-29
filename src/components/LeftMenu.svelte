@@ -1,18 +1,25 @@
 <script>
-    import {editor} from "../stores/editor";
+    import { shadowDOM } from "src/stores/shadow";
 
     const assetUrl = (name) => {
         return "chrome-extension://" + chrome.runtime.id + "/src/assets/" + name;
     }
+
+    function addBlock (type) {
+        const event = new CustomEvent('add-block', {detail: {type}});
+
+        // @ts-ignore
+        $shadowDOM.dispatchEvent(event);
+    }
 </script>
 <div class="d-flex flex-column me-2">
-    <button on:mousedown={() => $editor.addBlock("input")} class="btn btn-secondary left-border-green rounded-0">
+    <button on:mousedown={() => addBlock("input")} class="btn btn-secondary left-border-green rounded-0">
         Input
     </button>
-    <button on:mousedown={() => $editor.addBlock("click")} class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => addBlock("click")} class="btn btn-secondary left-border-red rounded-0">
         Click
     </button>
-    <button on:mousedown={() => $editor.addBlock("extract")} class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => addBlock("extract")} class="btn btn-secondary left-border-red rounded-0">
         Extract
     </button>
 </div>

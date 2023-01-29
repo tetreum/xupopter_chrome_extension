@@ -11,6 +11,7 @@
         }
         input {
             background-color: black;
+            color: white;
         }
         .item img {
             width: 200px;
@@ -20,7 +21,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <input type="text" name="q">
+    <form method="get" class="text-center my-5 border-bottom pb-3">
+        <input type="text" name="q">
+        <button id="submit" class="btn btn-primary">Search</button>
+    </form>
     <div class="results container">
         <div class="item row">
             <div class="col-auto">
