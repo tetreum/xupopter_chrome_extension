@@ -1,5 +1,4 @@
 <script>
-    import { shadowDOM } from "src/stores/shadow";
     import { select } from 'optimal-select-x'
     import { BlockType } from "src/models/IBlock";
 

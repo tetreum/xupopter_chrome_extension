@@ -4,6 +4,7 @@
     import { createEventDispatcher } from 'svelte';
     import { BlockType } from "src/models/IBlock";
     import InputBlock from "./InputBlock.svelte";
+    import ClickBlock from "./ClickBlock.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -29,6 +30,8 @@
             <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
         {:else if block.type === BlockType.Input}
             <InputBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
+        {:else if block.type === BlockType.Click}
+            <ClickBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
         {:else}
         <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
         {/if}
@@ -44,6 +47,9 @@
     }
     .block-input {
         border-left: 4px solid green !important;
+    }
+    .block-click {
+        border-left: 4px solid #003c80 !important;
     }
     .block-extract {
         border-left: 4px solid red !important;

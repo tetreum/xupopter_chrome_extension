@@ -6,6 +6,7 @@
     import Inspector from '../lib/inspector-dom';
     import { BlockType } from 'src/models/IBlock';
     import type IRecipe from 'src/models/IRecipe';
+    import Preview from './Preview.svelte';
 
     let styles;
     let inspector = Inspector({
@@ -16,6 +17,7 @@
             console.log(el);
         }
     });
+    let showPreview = false;
     let recipe : IRecipe = {
         uuid: "sdf",
         name: "my recipe",
@@ -87,10 +89,20 @@
         }
         hovering = 0;
     }
+
+    function preview () {
+        showPreview = true;
+    }
     
 </script>
+{#if showPreview}
+<Preview bind:recipe={recipe} on:close={e => showPreview = false} />
+{/if}
 <div class="w-100">
-    <div>Diagram</div>
+    <div class="text-white mb-2 d-flex justify-content-between">
+        <span class="my-auto">Recipe</span>
+        <button on:mousedown={preview} class="btn btn-link" title="Preview" type="button"><i class="fas fa-eye"></i></button>
+    </div>
     <div id="diagram" on:mousedown={onBackgroundClick}>
         {#each recipe.blocks as block, index  (index)}
             <Block       
