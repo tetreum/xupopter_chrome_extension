@@ -4,6 +4,7 @@
 
     export let recipe;
 
+    let currentTab = "output";
     let jsonPreview = "";
     let data = [];
     const dispatch = createEventDispatcher();
@@ -43,16 +44,32 @@
     function close () {
         dispatch("close");
     }
+
+    function selectTab (tab) {
+        currentTab = tab;
+    }
+
 </script>
 <div class="modal d-block" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Preview</h5>
+        <div class="modal-header pb-0 border-bottom-0">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <button on:mousedown={e => selectTab("output")} class="nav-link" class:active={currentTab === 'output'}>Output</button>
+                </li>
+                <li class="nav-item">
+                    <button on:mousedown={e => selectTab("recipe")} class="nav-link" class:active={currentTab === 'recipe'}>Recipe</button>
+                </li>
+            </ul>
           <button type="button" class="btn-close" on:mousedown={close} aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <pre>{jsonPreview}</pre>
+            {#if currentTab === 'output'}
+                <pre>{jsonPreview}</pre>
+            {:else}
+                <pre>{JSON.stringify(recipe, null, 2)}</pre>
+            {/if}
         </div>
         <div class="modal-footer">
           <button on:mousedown={close} type="button" class="btn btn-secondary">Close</button>
@@ -60,3 +77,9 @@
       </div>
     </div>
 </div>
+<style>
+    pre {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+</style>

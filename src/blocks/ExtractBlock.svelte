@@ -45,13 +45,20 @@
 
     function onSelect (el) {
         // @ts-ignore
-        block.details.selector = select(el, {
+        let selector = select(el, {
             ignore: {
                 attribute: (e,t,n=(()=>{})) => {
                     return !/(^class$)|(^id$)/.test(e) || ["style", "data-reactid", "data-react-checksum"].indexOf(e) > -1;
                 }
             },
         });
+
+        // make it smarter/capable of crawling lists
+        if (selector.includes("nth-of-type")) {
+            selector = selector.replace(/:nth-of-type\([0-9]+\)/, '');
+        }
+
+        block.details.selector = selector;
 
         const tagName = el.tagName.toLowerCase();
 
