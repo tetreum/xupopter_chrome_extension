@@ -1,4 +1,5 @@
 <script>
+    import { BlockType } from "src/models/IBlock";
     import { shadowDOM } from "src/stores/shadow";
 
     const assetUrl = (name) => {
@@ -13,13 +14,13 @@
     }
 </script>
 <div class="d-flex flex-column me-2">
-    <button on:mousedown={() => addBlock("input")} class="btn btn-secondary left-border-green rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Input)} class="btn btn-secondary left-border-green rounded-0">
         Input
     </button>
-    <button on:mousedown={() => addBlock("click")} class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Click)} class="btn btn-secondary left-border-red rounded-0">
         Click
     </button>
-    <button on:mousedown={() => addBlock("extract")} class="btn btn-secondary left-border-red rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Extract)} class="btn btn-secondary left-border-red rounded-0">
         Extract
     </button>
 </div>

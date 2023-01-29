@@ -9,9 +9,9 @@
 
     let styles;
     let inspector = Inspector({
-        root: 'body',                       // root element
+        root: 'body',
         excluded: ["#xupopter-extension-container"],
-        outlineStyles: '2px solid orange',  // styles
+        outlineStyle: '2px solid orange',
         onClick: el => {
             console.log(el);
         }
@@ -40,6 +40,11 @@
             case BlockType.Extract:
                 block.details = {
                     name: "data" + Math.floor(Math.random() * (20 - 1 + 1) + 1)
+                };
+                break;
+            case BlockType.Input:
+                block.details = {
+                    text: "TEXT_TO_WRITE"
                 };
                 break;
         }

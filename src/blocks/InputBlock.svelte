@@ -1,4 +1,5 @@
 <script>
+    import { shadowDOM } from "src/stores/shadow";
     import { select } from 'optimal-select-x'
     import { BlockType } from "src/models/IBlock";
 
@@ -18,7 +19,7 @@
     }
 
     function saveName () {
-        block.details.name = fieldName;
+        block.details.text = fieldName;
     }
 
     function calculateMatches() {
@@ -32,12 +33,10 @@
     function changeSelector () {
         if (block.details.selector) {
             previousSelector = block.details.selector;
-            showPreview(false);
         }
         if (inspector.isEnabled()) {
             inspector.cancel();
         }
-        isInspecting = true;
         inspector.enable((el) => {
             onSelect(el);
         });
@@ -45,7 +44,7 @@
 
     function onSelect (el) {
         // @ts-ignore
-        block.details.selector = select(el, {
+        let selector = select(el, {
             ignore: {
                 attribute: (e,t,n=(()=>{})) => {
                     return !/(^class$)|(^id$)/.test(e) || ["style", "data-reactid", "data-react-checksum"].indexOf(e) > -1;
@@ -53,42 +52,16 @@
             },
         });
 
-        const tagName = el.tagName.toLowerCase();
-
-        // try to understand what user actually wants to extract from that element
-        switch (tagName) {
-            case "img":
-                block.details.property = "src";
-            break;
-            default:
-                block.details.property = "text";
-            break;
-        }
-
-        // improve the name when possible
-        if (isDefaultName()) {
-            switch (tagName) {
-                case "img":
-                    block.details.name = "image";
-                break;
-                case "h1":
-                case "h2":
-                case "h3":
-                case "h4":
-                case "h5":
-                case "h6":
-                    block.details.name = "title";
-                break;
-                case "p":
-                    block.details.name = "description";
-                break;
+        // try to make a more robust selector
+        if (selector === "input") {
+            if (el.id) {
+                selector = '#' + el.id;
+            } else if (el.name) {
+                selector += '[name="' + el.name + '"]';
             }
         }
-        
-    }
 
-    function isDefaultName () {
-        return block.details.name.match(/data[0-9]+$/gm);
+        block.details.selector = selector;
     }
 
     function onChange(block) {
@@ -116,38 +89,27 @@
         isInspecting = false;
     }
 
-    function showPreview (show) {
-        if (!block.details.selector || isInspecting) {
-            return;
-        }
-        document.querySelectorAll(block.details.selector).forEach(el => {
-            if (show) {
-                inspector.highlight(el);
-            } else {
-                inspector.removeHighlight(el);
-            }
-        });
-    }
-
     $: onChange(block);
     $: onBlockSelected(selectedBlockIndex == index);
+    $: {
+        isInspecting = selectedBlockIndex == index && inspector.isEnabled();
+    }
 
     // if its a new block, start element selector
     if (!block.details.selector) {
         changeSelector();
     }
 </script>
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<div class="text-center" on:mouseover={e => showPreview(true)} on:mouseleave={e => showPreview(false)}>
+<div class="text-center">
     <div class="mb-1">
-        <strong>extract - </strong>
-        <strong contenteditable="true" bind:textContent={fieldName} on:focusout={saveName} class="cursor-text">{block.details.name ? block.details.name : "data" + Math.floor(Math.random() * (20 - 1 + 1) + 1)}</strong>
+        <strong>input - </strong>
+        <strong contenteditable="true" bind:textContent={fieldName} on:focusout={saveName} class="cursor-text">{block.details.text ? block.details.text : "TEXT_TO_WRITE"}</strong>
         <div class="float-end">
             {#if isInspecting}
             <div on:mousedown={stopInspecting} class="bg-success p-1 text-small d-inline-block cursor-pointer" title="Save choosen selector"><i class="fas fa-check"></i></div>
             <div on:mousedown={cancelNewSelector} class="bg-danger p-1 text-small d-inline-block cursor-pointer" title="Cancel inspector"><i class="fas fa-ban"></i></div>
             {/if}
-            <div on:mousedown={changeSelector} class="bg-info p-1 text-small cursor-crosshair d-inline-block" title="Amount of matches. Click to edit the selector">{matchesCount}</div>
+            <div on:mousedown={changeSelector} class="bg-info p-1 text-small cursor-crosshair d-inline-block" title="Amount of matches. Click to edit the selector"><i class="fas fa-pencil"></i></div>
         </div>
     </div>
     <div class="text-muted">{block.details.selector ? block.details.selector : ''}</div>
