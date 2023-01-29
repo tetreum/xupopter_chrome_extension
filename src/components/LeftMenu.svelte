@@ -14,13 +14,13 @@
     }
 </script>
 <div class="d-flex flex-column me-2">
-    <button on:mousedown={() => addBlock(BlockType.Input)} class="btn btn-secondary block-input rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Input)} class="btn btn-secondary block-input rounded-0 border-bottom border-dark">
         Input
     </button>
-    <button on:mousedown={() => addBlock(BlockType.Click)} class="btn btn-secondary block-click rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Click)} class="btn btn-secondary block-click rounded-0 border-bottom border-dark">
         Click
     </button>
-    <button on:mousedown={() => addBlock(BlockType.Extract)} class="btn btn-secondary block-extract rounded-0">
+    <button on:mousedown={() => addBlock(BlockType.Extract)} class="btn btn-secondary block-extract rounded-0 border-bottom border-dark">
         Extract
     </button>
 </div>

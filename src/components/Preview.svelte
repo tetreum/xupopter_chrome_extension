@@ -52,7 +52,7 @@
 </script>
 <div class="modal d-block" tabindex="-1">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content bg-dark text-white">
         <div class="modal-header pb-0 border-bottom-0">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -62,7 +62,7 @@
                     <button on:mousedown={e => selectTab("recipe")} class="nav-link" class:active={currentTab === 'recipe'}>Recipe</button>
                 </li>
             </ul>
-          <button type="button" class="btn-close" on:mousedown={close} aria-label="Close"></button>
+          <button type="button" class="btn btn-link text-white" on:mousedown={close} aria-label="Close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             {#if currentTab === 'output'}
@@ -72,7 +72,7 @@
             {/if}
         </div>
         <div class="modal-footer">
-          <button on:mousedown={close} type="button" class="btn btn-secondary">Close</button>
+          <button on:mousedown={close} type="button" class="btn btn-dark border">Close</button>
         </div>
       </div>
     </div>
@@ -81,5 +81,8 @@
     pre {
         max-height: 80vh;
         overflow-y: auto;
+    }
+    .nav-link:not(.active) {
+        color: white;
     }
 </style>

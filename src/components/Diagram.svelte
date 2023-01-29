@@ -110,7 +110,7 @@
 <div class="w-100">
     <div class="text-white mb-2 d-flex justify-content-between">
         <span class="my-auto">Recipe</span>
-        <button on:mousedown={preview} class="btn btn-link" title="Preview" type="button"><i class="fas fa-eye"></i></button>
+        <button on:mousedown={preview} class="btn btn-link text-white" title="Preview" type="button"><i class="fas fa-eye"></i></button>
     </div>
     <div id="diagram" on:mousedown={onBackgroundClick}>
         {#each recipe.blocks as block, index  (index)}

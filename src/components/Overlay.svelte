@@ -39,5 +39,6 @@
         width: 30vw;
         height: 100vh;
         font-family: sans-serif;
+        box-shadow: 0px 0px 10px #232931;
     }
 </style>
