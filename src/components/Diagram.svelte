@@ -7,6 +7,9 @@
     import { BlockType } from 'src/models/IBlock';
     import type IRecipe from 'src/models/IRecipe';
     import Preview from './Preview.svelte';
+    import { storage } from 'src/storage';
+    import LinkClient from './LinkClient.svelte';
+    import { saveRecipe } from 'src/lib/XupopterClient';
 
     let styles;
     let inspector = Inspector({
@@ -18,6 +21,8 @@
         }
     });
     let showPreview = false;
+    let showLink = false;
+    let isSaving = false;
     let recipe : IRecipe = {
         uuid: generateUUID(),
         name: "my recipe",
@@ -102,15 +107,43 @@
     function preview () {
         showPreview = true;
     }
+
+    async function save () {
+        const data = await storage.get();
+
+        if (!data.xupopterClient) {
+            showLink = true;
+            return;
+        }
+
+        isSaving = true;
+        await saveRecipe(recipe);
+        isSaving = false;
+    }
+
+    function onClientLinked () {
+        showLink = false;
+        save();
+    }
     
 </script>
 {#if showPreview}
 <Preview bind:recipe={recipe} on:close={e => showPreview = false} />
 {/if}
+{#if showLink}
+<LinkClient on:client-linked={e => onClientLinked()} on:close={e => showLink = false} />
+{/if}
 <div class="w-100">
     <div class="text-white mb-2 d-flex justify-content-between">
         <span class="my-auto">Recipe</span>
-        <button on:mousedown={preview} class="btn btn-link text-white" title="Preview" type="button"><i class="fas fa-eye"></i></button>
+        <div>
+            <button on:mousedown={preview} class="btn btn-link text-white" title="Preview" type="button"><i class="fas fa-eye"></i></button>
+            {#if isSaving}
+                <i class="fas fa-spinner fa-spin"></i>
+            {:else}
+                <button on:mousedown={save} class="btn btn-link text-white" title="Save" type="button"><i class="fas fa-save"></i></button>
+            {/if}
+        </div>
     </div>
     <div id="diagram" on:mousedown={onBackgroundClick}>
         {#each recipe.blocks as block, index  (index)}

@@ -1,13 +1,13 @@
 type IStorage = {
-    count: number;
+    xupopterClient?: string;
 };
 
 const defaultStorage: IStorage = {
-    count: 0,
+    xupopterClient: null,
 };
 
 export const storage = {
     get: (): Promise<IStorage> =>
         chrome.storage.sync.get(defaultStorage) as Promise<IStorage>,
-    set: (value: IStorage): Promise<void> => chrome.storage.sync.set(value),
+    set: (value: IStorage): Promise<void> => chrome.storage.sync.set(value)
 };
