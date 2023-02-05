@@ -23,6 +23,9 @@
     <button on:mousedown={() => addBlock(BlockType.Extract)} class="btn btn-secondary block-extract rounded-0 border-bottom border-dark">
         Extract
     </button>
+    <button on:mousedown={() => addBlock(BlockType.Paginate)} class="btn btn-secondary block-paginate rounded-0 border-bottom border-dark">
+        Paginate
+    </button>
 </div>
 <style>
     .block-input {
@@ -33,5 +36,8 @@
     }
     .block-extract {
         border-left: 4px solid red !important;
+    }
+    .block-paginate {
+        border-left: 4px solid #c27ec7 !important;
     }
 </style>

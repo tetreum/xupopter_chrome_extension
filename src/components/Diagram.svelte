@@ -23,6 +23,7 @@
     let showPreview = false;
     let showLink = false;
     let isSaving = false;
+    let hoveredBlockId;
     let parsedUrl = location.host.split(".");
     let recipe : IRecipe = {
         id: generateUUID(),
@@ -75,7 +76,7 @@
 
     let hovering : number = 0;
 
-    const drop = (event, target) => {
+    const drop = (event, target : number) => {
         event.dataTransfer.dropEffect = 'move'; 
         const start = parseInt(event.dataTransfer.getData("text/plain"));
         const newTracklist = recipe.blocks;
@@ -91,7 +92,7 @@
         hovering = null;
     }
 
-    const dragstart = (event, i) => {
+    const dragstart = (event, i: number) => {
         event.dataTransfer.effectAllowed = 'move';
         event.dataTransfer.dropEffect = 'move';
         const start = i;
@@ -149,13 +150,13 @@
         </div>
     </div>
     <div id="diagram" on:mousedown={onBackgroundClick}>
-        {#each recipe.blocks as block, index  (index)}
+        {#each recipe.blocks as block, index (block.id)}
             <Block       
                 bind:recipe={recipe}
                 bind:block={block}
-                index={index}
                 inspector={inspector}
                 bind:hovering={hovering}
+                bind:hoveredBlockId={hoveredBlockId}
                 on:dragstart={event => dragstart(event.detail.event, index)}
                 on:drop={event => drop(event.detail.event, index)}
             />

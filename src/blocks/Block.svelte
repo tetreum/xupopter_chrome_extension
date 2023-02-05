@@ -5,35 +5,40 @@
     import { BlockType } from "src/models/IBlock";
     import InputBlock from "./InputBlock.svelte";
     import ClickBlock from "./ClickBlock.svelte";
+    import PaginateBlock from "./PaginateBlock.svelte";
 
     const dispatch = createEventDispatcher();
 
     export let recipe;
-    export let index;
     export let block;
     export let hovering;
     export let inspector;
+    export let hoveredBlockId;
 </script>
-<div class="text-white p-2 {block.type === BlockType.Start ? '' : 'cursor-grab'}" 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<div id="block-{block.id}" class="text-white p-2 {block.type === BlockType.Start ? '' : 'cursor-grab'}" 
     draggable={block.type != BlockType.Start} 
-    class:is-active={hovering === index}
-    on:mousedown={() => hovering = index}
+    class:is-active={hovering === block.id}
+    on:mousedown={() => hovering = block.id}
     on:dragstart={event => dispatch('dragstart', {event})}
     on:dragover|preventDefault={e => {return false}}
     on:drop|preventDefault={event => dispatch('drop', {event})}
-    on:dragenter={() => hovering = index}
+    on:dragenter={() => hovering = block.id}
+    on:mouseover={() => hoveredBlockId = block.id}
 >
     <div class="real-block mb-2 p-2 block-{block.type}">
         {#if block.type === BlockType.Start}
             <StartBlock bind:block={block}/>
         {:else if block.type === BlockType.Extract}
-            <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
+            <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
         {:else if block.type === BlockType.Input}
-            <InputBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
+            <InputBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
         {:else if block.type === BlockType.Click}
-            <ClickBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
+            <ClickBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
+        {:else if block.type === BlockType.Paginate}
+            <PaginateBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering} bind:hoveredBlockId={hoveredBlockId}/>
         {:else}
-        <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:index={index} bind:selectedBlockIndex={hovering}/>
+            <ExtractBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
         {/if}
     </div>
 </div>
@@ -53,6 +58,9 @@
     }
     .block-extract {
         border-left: 4px solid red !important;
+    }
+    .block-paginate {
+        border-left: 4px solid #c27ec7 !important;
     }
     .is-active .real-block, .real-block:hover {
         background-color: rgba(52, 57, 68, 1);

@@ -3,6 +3,7 @@ export enum BlockType {
     Extract = "extract",
     Input = "input",
     Click = "click",
+    Paginate = "paginate",
 }
 
 export default interface IBlock {

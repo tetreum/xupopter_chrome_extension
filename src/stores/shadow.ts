@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const shadowDOM = writable<null>();
+export const shadowDOM = writable<ShadowRoot>();

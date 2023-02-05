@@ -13,13 +13,14 @@
     }
 
     function save() {
+        /*
         storage.set({ count }).then(() => {
             successMessage = "Options saved!";
 
             setTimeout(() => {
                 successMessage = null;
             }, 1500);
-        });
+        });*/
     }
 </script>
 

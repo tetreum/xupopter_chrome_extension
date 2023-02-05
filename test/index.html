@@ -13,6 +13,15 @@
             background-color: black;
             color: white;
         }
+        a {
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        .item:hover {
+            background-color: #464444;
+        }
+
         .item img {
             width: 200px;
             height: 100px;
@@ -21,40 +30,120 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <form method="get" class="text-center my-5 border-bottom pb-3">
-        <input type="text" name="q">
-        <button id="submit" class="btn btn-primary">Search</button>
-    </form>
-    <div class="results container">
-        <div class="item row">
-            <div class="col-auto">
-                <img src="https://i.pinimg.com/originals/f5/7f/9d/f57f9d3b3f7935074387f189a9e744b6.png">
-            </div>
-            <div  class="col">
-                <h6>Result 1</h6>
-                <p>Diseños De Casas De Campo, Casas De Ensueño De Lujo, Casas De Dos Pisos, Fachada De Casas Bonitas, Planos De Casas, Modelos De Casas Sencillas, Fachadas De Casas Modernas, Casas Americanas, Exteriores De Casas</p>
-            </div>
+    <div class="d-flex justify-content-between border-bottom">
+        <div>
+            <h1>HomeFinder</h1>
+            <p>We find your future house at outrageous prices.</p>
         </div>
-        <div class="item row">
-            <div  class="col-auto">
-                <img src="https://i.pinimg.com/originals/0f/8b/a5/0f8ba5b8d78ed7c43ababd190aafb282.jpg">
-            </div>
-            <div  class="col">
-                <h6>Result 2</h6>
-                <p>Description 2</p>
-            </div>
+        <div class="my-auto">
+            <form method="get" class="text-center">
+                <input type="text" name="q">
+                <button id="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <div class="my-auto me-3">
+            <a href="#">Create Account</a>
         </div>
     </div>
+    <div id="results-container" class="results container">
+        
+    </div>
+    <div class="text-center">
+        <a href="?page=" class="icon-arrow-right-after">
+            Next Page
+        </a>
+    </div>
     <script>
-        const houses = [
-            {
-                title: "Piso en calle de la Palma, Malasaña-Universidad, Madrid",
-                image: "1.jpg",
-                description: "TuMadre Consulting Inmobiliario presenta para sus clientes este maravilloso piso exterior, esquinazo, con cuatro balcones en un lado de la...",
-                rooms: 4,
-                meters: 141,
+        const $_GET = (k) => {
+            return (new URL(document.location)).searchParams.get(k);
+        };
+
+        class Listing {
+            constructor () {
+                this.MODE_NORMAL = "normal";
+                this.MODE_INIFINITE = "infinite";
+
+                this.currentPage = $_GET('page') ?? -1;
+                this.limit = 5;
+                this.mode = $_GET('mode') ?? this.MODE_NORMAL;
+                this.container = document.getElementById("results-container");
+                this.nextPageLink = document.querySelector(".icon-arrow-right-after");
+                this.fetching = false;
+
+                this.nextPage();
+                this.setupListeners();
             }
-        ];
+
+            setupListeners () {
+                if (this.mode === this.MODE_INIFINITE) {
+                    window.addEventListener('scroll', () => {
+                        const {
+                            scrollTop,
+                            scrollHeight,
+                            clientHeight
+                        } = document.documentElement;
+
+                        if (scrollTop + clientHeight >= scrollHeight - 5) {
+                            this.nextPage();
+                        }
+                    }, {
+                        passive: true
+                    });
+                }
+            }
+
+            async nextPage () {
+                if (this.fetching) {
+                    return;
+                }
+                this.fetching = true;
+                this.currentPage++;
+                this.nextPageLink.href = "?page=" + this.currentPage;
+
+                let houses = await (fetch("houses.json").then(response => response.json()));
+                houses = houses.splice(this.currentPage * this.limit, this.limit);
+
+                if (this.mode === this.MODE_NORMAL) {
+                    this.container.innerHTML = '';
+                }
+
+                houses.forEach(house => {
+                    this.container.appendChild(this.renderHouse(house));
+                });
+                this.fetching = false;
+            }
+
+            renderHouse(house) {
+                let tpl = `
+                    <div class="item row border-bottom p-2">
+                        <div class="col-auto">
+                            <a href="#">
+                                <img src="/images/${house.id}.jpg">
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            <a href="#">
+                                <h6>${house.title}</h6>
+                                <h3>${house.price}</h3>
+                                <div class="item-detail-char">
+                                    <span class="item-detail">${house.rooms}</span>
+                                    <span class="item-detail">${house.meters}</span>
+                                    <span class="item-detail">${house.floor}</span>
+                                </div>
+                                <p>${house.description}</p>
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                const tmp = document.createElement("div");
+                tmp.innerHTML = tpl;
+
+                return tmp.children[0];
+            }
+        }
+
+        window.listing = new Listing();
     </script>
 </body>
 </html>

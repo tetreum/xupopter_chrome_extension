@@ -5,15 +5,14 @@
     export let recipe;
     export let block;
     export let inspector;
-    export let selectedBlockIndex;
-    export let index;
+    export let selectedBlockId;
 
     let matchesCount = 0;
     let isInspecting = false;
     let previousSelector = null;
 
     function getSelectedBlock () {
-        return recipe.blocks[selectedBlockIndex];
+        return recipe.blocks.find(block => block.id === selectedBlockId);
     }
 
     function calculateMatches() {
@@ -66,7 +65,7 @@
         if (!isSelected) {
             const selectedBlock = getSelectedBlock();
             // do not disable inspector if the new selected block also uses it
-            if (selectedBlock && !([BlockType.Extract, BlockType.Click, BlockType.Input].includes(selectedBlock.type)) && selectedBlockIndex === (recipe.blocks.length - 1)) {
+            if (selectedBlock && !([BlockType.Extract, BlockType.Click, BlockType.Input].includes(selectedBlock.type)) && selectedBlockId === (recipe.blocks.length - 1)) {
                 stopInspecting();
             }
         }
@@ -84,9 +83,9 @@
     }
 
     $: onChange(block);
-    $: onBlockSelected(selectedBlockIndex == index);
+    $: onBlockSelected(selectedBlockId == block.id);
     $: {
-        isInspecting = selectedBlockIndex == index && inspector.isEnabled();
+        isInspecting = selectedBlockId == block.id && inspector.isEnabled();
     }
 
     // if its a new block, start element selector
