@@ -23,12 +23,13 @@
     let showPreview = false;
     let showLink = false;
     let isSaving = false;
+    let parsedUrl = location.host.split(".");
     let recipe : IRecipe = {
-        uuid: generateUUID(),
-        name: "my recipe",
+        id: generateUUID(),
+        name: parsedUrl.length > 2 ? parsedUrl[1] : parsedUrl[0],
         schema: 1,
         blocks: [
-            {type: BlockType.Start, details: {type: "url", source: window.location.href}},
+            {id: generateUUID(), type: BlockType.Start, details: {type: "url", source: window.location.href}},
         ]
     };
 
@@ -50,7 +51,7 @@
     }
 
     function addBlock (type : BlockType) {
-        let block = {type: type, details: {}};
+        let block = {id: generateUUID(), type: type, details: {}};
 
         switch (type) {
             case BlockType.Extract:
@@ -135,7 +136,9 @@
 {/if}
 <div class="w-100">
     <div class="text-white mb-2 d-flex justify-content-between">
-        <span class="my-auto">Recipe</span>
+        <div class="my-auto">
+            <input bind:value={recipe.name} type="text" class="form-control">
+        </div>
         <div>
             <button on:mousedown={preview} class="btn btn-link text-white" title="Preview" type="button"><i class="fas fa-eye"></i></button>
             {#if isSaving}
