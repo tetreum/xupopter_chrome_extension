@@ -94,9 +94,17 @@
         if (!isSelected) {
             const selectedBlock = getSelectedBlock();
 
-            // do not disable inspector if the new selected block also uses it
-            if (selectedBlock && !([BlockType.Extract, BlockType.Click, BlockType.Input].includes(selectedBlock.type)) && selectedBlockId === (recipe.blocks.length - 1)) {
-                stopInspecting();
+            if (selectedBlock) {
+                if (isConnecting && selectedBlockId != block.id) {
+                    block.details.startBlock = selectedBlockId;
+                    isConnecting = false;
+                    return;
+                }
+
+                // do not disable inspector if the new selected block also uses it
+                if (!([BlockType.Extract, BlockType.Click, BlockType.Input].includes(selectedBlock.type)) && selectedBlockId === (recipe.blocks.length - 1)) {
+                    stopInspecting();
+                }
             }
         }
     }
