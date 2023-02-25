@@ -35,5 +35,5 @@
         "resources": ["src/assets/*"],
         "matches": ["<all_urls>"]
     }],
-    "permissions": ["storage"]
+    "permissions": ["storage", "tabs"]
 }
