@@ -1,6 +1,6 @@
 {
     "name": "Xupopter",
-    "description": "Boilerplate for Chrome Extension Svelte Typescript project",
+    "description": "Open Source Web Scrapper",
     "version": "1.0",
     "manifest_version": 3,
     "icons": {

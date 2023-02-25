@@ -4,7 +4,7 @@
     "type": "module",
     "repository": {
         "type": "git",
-        "url": "https://github.com/nekitcorp/chrome-extension-svelte-typescript-boilerplate.git"
+        "url": "https://github.com/tetreum/xupopter_chrome_extension.git"
     },
     "scripts": {
         "dev": "vite",
@@ -16,7 +16,6 @@
         "@sveltejs/vite-plugin-svelte": "1.1.0",
         "@tsconfig/svelte": "3.0.0",
         "@types/chrome": "0.0.200",
-        "@types/drawflow": "^0.0.4",
         "svelte": "3.52.0",
         "svelte-check": "2.9.2",
         "svelte-preprocess": "4.10.7",
@@ -25,7 +24,6 @@
         "vite": "3.2.0"
     },
     "dependencies": {
-        "inspector-dom": "^0.1.1",
         "optimal-select-x": "^4.0.4"
     },
     "eslintConfig": {
