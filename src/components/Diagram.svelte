@@ -10,6 +10,7 @@
     import { storage } from 'src/storage';
     import LinkClient from './LinkClient.svelte';
     import { saveRecipe } from 'src/lib/XupopterClient';
+    import {ExpectedOutputType} from "src/models/IRecipe";
 
     let styles;
     let inspector = Inspector({
@@ -28,6 +29,7 @@
     let recipe : IRecipe = {
         id: generateUUID(),
         name: parsedUrl.length > 2 ? parsedUrl[1] : parsedUrl[0],
+        expected_output: ExpectedOutputType.List,
         schema: 1,
         blocks: [
             {id: generateUUID(), type: BlockType.Start, details: {type: "url", source: window.location.href}},

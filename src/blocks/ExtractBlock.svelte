@@ -8,6 +8,7 @@
     export let selectedBlockId;
 
     let fieldName;
+    let shownSelector;
     let matchesCount = 0;
     let isInspecting = false;
     let previousSelector = null;
@@ -18,6 +19,9 @@
 
     function saveName () {
         block.details.name = fieldName;
+    }
+    function saveSelector () {
+      block.details.selector = shownSelector;
     }
 
     function calculateMatches() {
@@ -156,7 +160,7 @@
             <div on:mousedown={changeSelector} class="bg-info p-1 text-small cursor-crosshair d-inline-block" title="Amount of matches. Click to edit the selector">{matchesCount}</div>
         </div>
     </div>
-    <div class="text-muted">{block.details.selector ? block.details.selector : ''}</div>
+    <div contenteditable="true" spellcheck="false" on:focusout={saveSelector} bind:textContent={shownSelector} class="text-muted cursor-text">{block.details.selector ? block.details.selector : ''}</div>
 </div>
 <style>
     .cursor-crosshair {

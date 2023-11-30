@@ -1,6 +1,7 @@
 <script>
     import { BlockType } from "src/models/IBlock";
     import { createEventDispatcher } from 'svelte';
+    import {ExpectedOutputType} from "../models/IRecipe";
 
     export let recipe;
 
@@ -9,47 +10,69 @@
     let data = [];
     const dispatch = createEventDispatcher();
 
-    recipe.blocks.forEach(block => {
+    function buildOutput () {
+      data = [];
+      recipe.blocks.forEach(block => {
         switch (block.type) {
-            case BlockType.JsonSchema:
-              for (const el of document.querySelectorAll('[type="application/ld+json"]')) {
-                const json = JSON.parse(el.innerText);
-                if (json["@type"] !== block.details.type) {
-                  continue;
-                }
-                data[0] = json;
+          case BlockType.JsonSchema:
+            for (const el of document.querySelectorAll('[type="application/ld+json"]')) {
+              const json = JSON.parse(el.innerText);
+              if (json["@type"] !== block.details.type) {
+                continue;
+              }
+              data[0] = json;
+            }
+
+            break;
+          case BlockType.Extract:
+            document.querySelectorAll(block.details.selector).forEach((entry, i) => {
+              if (typeof data[i] === "undefined") {
+                data[i] = {};
+              }
+              let val;
+
+              switch (block.details.property) {
+                case "src":
+                  val = entry.src;
+                  break;
+                case "value":
+                  val = entry.value;
+                  break;
+                case "text":
+                  val = entry.innerText;
+                  break;
+                case "html":
+                  val = entry.innerHTML;
+                  break;
               }
 
-              break;
-            case BlockType.Extract:
-                document.querySelectorAll(block.details.selector).forEach((entry, i) => {
-                    if (typeof data[i] === "undefined") {
-                        data[i] = {};
-                    }
-                    let val;
-
-                    switch (block.details.property) {
-                        case "src":
-                            val = entry.src;
-                            break;
-                        case "value":
-                            val = entry.value;
-                            break;
-                        case "text":
-                            val = entry.innerText;
-                            break;
-                        case "html":
-                            val = entry.innerHTML;
-                            break;
-                    }
-
-                    data[i][block.details.name] = val;
-                });
-                break;
+              data[i][block.details.name] = val;
+            });
+            break;
         }
-    })
+      });
 
-    jsonPreview = JSON.stringify(data, null, 2);
+      if (recipe.expected_output === ExpectedOutputType.Item && data.length > 1) {
+        const item = data[0];
+        for (const [i, entry] of data.entries()) {
+          if (i === 0) {
+            continue;
+          }
+          for (const [k, v] of Object.entries(entry)) {
+            if (!Array.isArray(item[k])) {
+              item[k] = [item[k]];
+            }
+            item[k].push(v);
+          }
+
+        }
+        data = item;
+      }
+
+      jsonPreview = JSON.stringify(data, null, 2);
+    }
+
+    buildOutput();
 
     function close () {
         dispatch("close");
@@ -72,6 +95,10 @@
                     <button on:mousedown={e => selectTab("recipe")} class="nav-link" class:active={currentTab === 'recipe'}>Recipe</button>
                 </li>
             </ul>
+            <select class="form-select w-auto d-inline-block py-1" bind:value={recipe.expected_output} on:change={buildOutput}>
+                <option value="item">Item</option>
+                <option value="list">List</option>
+            </select>
           <button type="button" class="btn btn-link text-white" on:mousedown={close} aria-label="Close"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
