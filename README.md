@@ -1,4 +1,4 @@
-[![Preview](https://github.com/tetreum/xupopter_chrome_extension/master/preview.png)](https://github.com/tetreum/xupopter_chrome_extension/master/preview.png)
+[![Preview](https://github.com/tetreum/xupopter_chrome_extension/blob/master/preview.png?raw=true)](https://github.com/tetreum/xupopter_chrome_extension/blob/master/preview.png?raw=true)
 
 ## Development
 
