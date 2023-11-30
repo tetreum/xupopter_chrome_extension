@@ -28,6 +28,21 @@
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "HomeFinder",
+            "alternateName": "Home Finders",
+            "url": "https://www.homefinder.com/",
+            "logo": "https://www.homefinder.com/logo.png",
+            "sameAs": [
+                "https://www.facebook.com/homefinder",
+                "https://twitter.com/homefinder",
+                "https://www.instagram.com/homefinder/"
+            ]
+        }
+    </script>
 </head>
 <body>
     <div class="d-flex justify-content-between border-bottom">
@@ -53,6 +68,28 @@
             Next Page
         </a>
     </div>
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org/",
+            "@type": "Product",
+            "name": "Deluxe Home",
+            "description": null,
+            "mpn": "150163_MPN",
+            "sku": "150163_SKU",
+            "image": [
+                "/images/1.jpg",
+                "/images/2.jpg"
+            ],
+            "offers": {
+                "url": {},
+                "@type": "Offer",
+                "priceCurrency": "EUR",
+                "price": "110.00",
+                "availability": "http://schema.org/InStock"
+            },
+            "@id": "150163"
+        }
+    </script>
     <script>
         const $_GET = (k) => {
             return (new URL(document.location)).searchParams.get(k);

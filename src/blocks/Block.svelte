@@ -1,19 +1,20 @@
 <script>
-    import StartBlock from "./StartBlock.svelte";
-    import ExtractBlock from "./ExtractBlock.svelte";
-    import { createEventDispatcher } from 'svelte';
-    import { BlockType } from "src/models/IBlock";
-    import InputBlock from "./InputBlock.svelte";
-    import ClickBlock from "./ClickBlock.svelte";
-    import PaginateBlock from "./PaginateBlock.svelte";
+  import StartBlock from "./StartBlock.svelte";
+  import ExtractBlock from "./ExtractBlock.svelte";
+  import {createEventDispatcher} from 'svelte';
+  import {BlockType} from "src/models/IBlock";
+  import InputBlock from "./InputBlock.svelte";
+  import ClickBlock from "./ClickBlock.svelte";
+  import PaginateBlock from "./PaginateBlock.svelte";
+  import JsonSchemaBlock from "./JsonSchemaBlock.svelte";
 
-    const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
-    export let recipe;
-    export let block;
-    export let hovering;
-    export let inspector;
-    export let hoveredBlockId;
+  export let recipe;
+  export let block;
+  export let hovering;
+  export let inspector;
+  export let hoveredBlockId;
 </script>
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div id="block-{block.id}" class="text-white p-2 {block.type === BlockType.Start ? '' : 'cursor-grab'}" 
@@ -35,6 +36,8 @@
             <InputBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
         {:else if block.type === BlockType.Click}
             <ClickBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
+        {:else if block.type === BlockType.JsonSchema}
+            <JsonSchemaBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering}/>
         {:else if block.type === BlockType.Paginate}
             <PaginateBlock bind:block={block} bind:recipe={recipe} inspector={inspector} bind:selectedBlockId={hovering} bind:hoveredBlockId={hoveredBlockId}/>
         {:else}

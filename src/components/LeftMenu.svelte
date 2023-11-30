@@ -23,6 +23,9 @@
     <button on:mousedown={() => addBlock(BlockType.Extract)} class="btn btn-secondary block-extract rounded-0 border-bottom border-dark">
         Extract
     </button>
+    <button on:mousedown={() => addBlock(BlockType.JsonSchema)} class="btn btn-secondary block-paginate rounded-0 border-bottom border-dark">
+        Schema
+    </button>
     <button on:mousedown={() => addBlock(BlockType.Paginate)} class="btn btn-secondary block-paginate rounded-0 border-bottom border-dark">
         Paginate
     </button>

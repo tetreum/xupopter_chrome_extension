@@ -4,6 +4,7 @@ export enum BlockType {
     Input = "input",
     Click = "click",
     Paginate = "paginate",
+    JsonSchema = "jsonschema",
 }
 
 export default interface IBlock {

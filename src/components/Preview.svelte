@@ -11,6 +11,16 @@
 
     recipe.blocks.forEach(block => {
         switch (block.type) {
+            case BlockType.JsonSchema:
+              for (const el of document.querySelectorAll('[type="application/ld+json"]')) {
+                const json = JSON.parse(el.innerText);
+                if (json["@type"] !== block.details.type) {
+                  continue;
+                }
+                data[0] = json;
+              }
+
+              break;
             case BlockType.Extract:
                 document.querySelectorAll(block.details.selector).forEach((entry, i) => {
                     if (typeof data[i] === "undefined") {

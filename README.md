@@ -1,3 +1,4 @@
+[![Preview](https://github.com/tetreum/xupopter_chrome_extension/master/preview.png)](https://github.com/tetreum/xupopter_chrome_extension/master/preview.png)
 
 ## Development
 
@@ -8,6 +9,9 @@ npm i
 # build files to `/dist` directory
 # HMR for extension pages and content scripts
 npm run dev
+
+# Run test site locally
+cd test && npx http-server --ssl;
 ```
 
 ## Build
@@ -17,8 +21,14 @@ npm run dev
 $ npm run build
 ```
 
-## Sponsors
 
-[![tiiny.host](https://tiiny.host/assets/logo.png)](https://tiiny.host)
+### How to add a new block
 
-https://xupopter.tiiny.site/
+1. Create the block itself in `src/blocks`
+2. List it on `src/components/LeftMenu.svelte`
+3. List it on `src/models/IBlock.svelte`
+4. List it on `src/blocks/Block.svelte`
+
+## Test page
+
+https://tetreum.github.io/xupopter_chrome_extension/
